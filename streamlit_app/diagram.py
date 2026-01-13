@@ -1,5 +1,6 @@
 import streamlit as st
 import sidebar
+import streamlit.components.v1 as components
 
 def diagram_page():
     """Diagram page for visualizations."""
@@ -7,13 +8,18 @@ def diagram_page():
     
     sidebar.render_sidebar()
     
-    st.markdown("### Visualizations and Diagrams")
-    st.info("This page is for displaying diagrams and visualizations. Add your diagram content here.")
+    st.markdown("### AWS Architecture Diagram")
     
-    # Placeholder for diagram content
-    # You can add graphviz charts, plotly charts, or other visualizations here
-    # Example:
-    # import graphviz
-    # graph = graphviz.Digraph()
-    # graph.edge("A", "B")
-    # st.graphviz_chart(graph)
+    # Embed the diagram from the URL
+    diagram_url = "https://mertali07.github.io/aws_presentation/"
+    
+    # Use iframe to embed the external diagram
+    components.iframe(
+        src=diagram_url,
+        width=None,
+        height=800,
+        scrolling=True
+    )
+    
+    st.markdown("---")
+    st.markdown(f"**Source:** [AWS Presentation]({diagram_url})")
