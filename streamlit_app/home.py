@@ -111,7 +111,7 @@ def home_page():
                             st.error(f"❌ Unexpected error uploading image {img.name}: {e}")
                             st.exception(e)
 
-            payload["audio_path"].append(f"s3://{config.S3_RECORDING_BUCKET}/{s3_key}")
+            # payload["audio_path"].append(f"s3://{config.S3_RECORDING_BUCKET}/{s3_key}")
 
             # --- Send to Lambda URL ---
             try:
