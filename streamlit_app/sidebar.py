@@ -38,25 +38,25 @@ def render_sidebar():
             for img in uploaded_images:
                 st.image(img, caption=img.name, use_container_width=True)
      
-        # Audio file (preview only)
-        uploaded_audio = st.file_uploader(
-            "Ses Dosyası Yükle",
-            type=["mp3", "wav", "m4a", "ogg"],
-            accept_multiple_files=False,
-            key="audio_uploader",
-        )
+        # # Audio file (preview only)
+        # uploaded_audio = st.file_uploader(
+        #     "Ses Dosyası Yükle",
+        #     type=["mp3", "wav", "m4a", "ogg"],
+        #     accept_multiple_files=False,
+        #     key="audio_uploader",
+        # )
      
-        if uploaded_audio:
-            st.audio(uploaded_audio, format="audio/mp3")
+        # if uploaded_audio:
+        #     st.audio(uploaded_audio, format="audio/mp3")
      
-        # --- 🎤 Audio Recorder ---
-        st.sidebar.title("Ses Kaydet")
-        recorded_audio = st.audio_input("Sesli mesaj kaydet")
+        # # --- 🎤 Audio Recorder ---
+        # st.sidebar.title("Ses Kaydet")
+        # recorded_audio = st.audio_input("Sesli mesaj kaydet")
      
-        if recorded_audio:
-            st.sidebar.audio(recorded_audio, format="audio/mp3")
-            # Treat recorded audio as if uploaded
-            uploaded_audio = recorded_audio
+        # if recorded_audio:
+        #     st.sidebar.audio(recorded_audio, format="audio/mp3")
+        #     # Treat recorded audio as if uploaded
+        #     uploaded_audio = recorded_audio
      
         st.sidebar.title("Örnek Sorular")
         st.write(
@@ -69,4 +69,4 @@ def render_sidebar():
             "İç denetimde, 2024/Ocak dönemine ait bazı hizmet faturalarında KDV oranının hatalı uygulandığı tespit edilmiştir. Sorunun çözümü için referans alınması gereken mevzuatlar nelerdir?",
         )
     
-    return uploaded_images, uploaded_audio
+    return uploaded_images
