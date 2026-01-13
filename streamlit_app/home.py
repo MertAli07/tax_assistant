@@ -13,7 +13,7 @@ def home_page():
     
     # Import render_sidebar from sidebar module
     import sidebar
-    uploaded_images, uploaded_audio = sidebar.render_sidebar()
+    uploaded_images = sidebar.render_sidebar()
     
     # Initialize chat history
     if "messages" not in st.session_state:
@@ -33,15 +33,15 @@ def home_page():
             if uploaded_images:
                 for img in uploaded_images:
                     st.image(img, caption=img.name, use_container_width=True)
-            if uploaded_audio:
-                st.audio(uploaded_audio, format="audio/mp3")
+            # if uploaded_audio:
+            #     st.audio(uploaded_audio, format="audio/mp3")
             st.session_state.messages.append({"role": "user", "content": user_input})
 
         with st.spinner("Generating response..."):
             start_time = time.time()
             # --- Prepare payload ---
             file_name_base = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            payload = {"user_input": user_input, "image_path": [], "audio_path": []}
+            payload = {"user_input": user_input, "image_path": []}
 
             # Upload images to S3 and add S3 URIs
             if uploaded_images:
@@ -111,61 +111,7 @@ def home_page():
                             st.error(f"❌ Unexpected error uploading image {img.name}: {e}")
                             st.exception(e)
 
-            # Upload audio to S3 and add S3 URI
-            if uploaded_audio:
-                audio_name = f"{file_name_base}_{uploaded_audio.name}"
-                s3_key = f"{config.S3_AUDIO_PREFIX}{audio_name}"
-                try:
-                    # Reset file pointer to beginning
-                    uploaded_audio.seek(0)
-                    # Try upload with default settings first
-                    try:
-                        config.s3.upload_fileobj(uploaded_audio, config.S3_RECORDING_BUCKET, s3_key)
-                    except ClientError as upload_error:
-                        # If AccessDenied, try with server-side encryption
-                        if upload_error.response.get("Error", {}).get("Code") == "AccessDenied":
-                            uploaded_audio.seek(0)
-                            config.s3.upload_fileobj(
-                                uploaded_audio, 
-                                config.S3_RECORDING_BUCKET, 
-                                s3_key,
-                                ExtraArgs={'ServerSideEncryption': 'AES256'}
-                            )
-                        else:
-                            raise
-                    payload["audio_path"].append(f"s3://{config.S3_RECORDING_BUCKET}/{s3_key}")
-                except ClientError as e:
-                    error_code = e.response.get("Error", {}).get("Code", "")
-                    error_msg = e.response.get("Error", {}).get("Message", str(e))
-                    error_details = e.response.get("Error", {})
-                    
-                    # Get account info for debugging
-                    account_info = config.get_aws_account_info()
-                    
-                    if error_code == "AccessDenied":
-                        st.error(f"❌ Access Denied uploading audio {uploaded_audio.name}")
-                        with st.expander("🔍 Error Details"):
-                            st.write(f"**Error Code:** {error_code}")
-                            st.write(f"**Message:** {error_msg}")
-                            st.write(f"**AWS Account:** {account_info.get('account_id', 'Unknown')}")
-                            st.write(f"**User ARN:** {account_info.get('user_arn', 'Unknown')}")
-                            st.write(f"**Bucket:** {config.S3_RECORDING_BUCKET}")
-                            st.write(f"**Key:** {s3_key}")
-                            st.write(f"**Region:** {config.S3_REGION}")
-                            st.json(error_details)
-                        
-                        st.warning("💡 **Possible causes:**\n"
-                                  "1. Bucket policy is blocking access\n"
-                                  "2. Bucket requires encryption headers\n"
-                                  "3. Bucket ACL restrictions\n"
-                                  "4. Wrong AWS account (check if bucket exists in this account)")
-                    else:
-                        st.error(f"❌ Error uploading audio {uploaded_audio.name}: {error_code} - {error_msg}")
-                        with st.expander("🔍 Error Details"):
-                            st.json(error_details)
-                except Exception as e:
-                    st.error(f"❌ Unexpected error uploading audio {uploaded_audio.name}: {e}")
-                    st.exception(e)
+            payload["audio_path"].append(f"s3://{config.S3_RECORDING_BUCKET}/{s3_key}")
 
             # --- Send to Lambda URL ---
             try:
