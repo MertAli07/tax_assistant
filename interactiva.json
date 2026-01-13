@@ -1,0 +1,10 @@
+data:action/json, { "actions": [ { "hide": { "tags": [ "steps" ] } }, { "hide": { "tags": [ "toggles" ] } }, { "hide": { "tags": [ "title" ] } }, { "show": { "tags": [ "1" ] } }, { "show": { "tags": [ "toggle1" ] } } ] }
+data:action/json, { "actions": [ { "hide": { "tags": [ "steps" ] } }, { "hide": { "tags": [ "toggles" ] } }, { "hide": { "tags": [ "title" ] } }, { "show": { "tags": [ "2" ] } }, { "show": { "tags": [ "toggle2" ] } } ] }
+data:action/json, { "actions": [ { "hide": { "tags": [ "steps" ] } }, { "hide": { "tags": [ "toggles" ] } }, { "hide": { "tags": [ "title" ] } }, { "show": { "tags": [ "3" ] } }, { "show": { "tags": [ "toggle3" ] } } ] }
+data:action/json, { "actions": [ { "hide": { "tags": [ "steps" ] } }, { "hide": { "tags": [ "toggles" ] } }, { "hide": { "tags": [ "title" ] } }, { "show": { "tags": [ "4" ] } }, { "show": { "tags": [ "toggle4" ] } } ] }
+data:action/json, { "actions": [ { "hide": { "tags": [ "steps" ] } }, { "hide": { "tags": [ "toggles" ] } }, { "hide": { "tags": [ "title" ] } }, { "show": { "tags": [ "5" ] } }, { "show": { "tags": [ "toggle5" ] } } ] }
+data:action/json, { "actions": [ { "hide": { "tags": [ "steps" ] } }, { "hide": { "tags": [ "toggles" ] } }, { "hide": { "tags": [ "title" ] } }, { "show": { "tags": [ "6" ] } }, { "show": { "tags": [ "toggle6" ] } } ] }
+data:action/json, { "actions": [ { "hide": { "tags": [ "steps" ] } }, { "hide": { "tags": [ "toggles" ] } }, { "hide": { "tags": [ "title" ] } }, { "show": { "tags": [ "7" ] } }, { "show": { "tags": [ "toggle7" ] } } ] }
+data:action/json, { "actions": [ { "hide": { "tags": [ "steps" ] } }, { "hide": { "tags": [ "toggles" ] } }, { "hide": { "tags": [ "title" ] } }, { "show": { "tags": [ "8" ] } }, { "show": { "tags": [ "toggle8" ] } } ] }
+
+data:action/json, { "actions": [ { "show": { "tags": [ "steps" ] } }, { "show": { "tags": [ "title" ] } }, { "show": { "tags": [ "toggles" ] } } ] }
