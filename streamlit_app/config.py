@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Tuple
+import os
 import boto3
 from botocore.exceptions import ClientError
 
@@ -8,21 +9,36 @@ API_URL = "https://k6gnqai4bffo6n4ras6ixyckmq0cbbwy.lambda-url.eu-central-1.on.a
 
 # S3 Settings
 S3_BUCKET = "gelir-vergisi "  # for outputs
-S3_REGION = "eu-central-1"
+S3_REGION = os.getenv("AWS_DEFAULT_REGION", "eu-central-1")
 S3_RECORDING_BUCKET = "gelir-vergisi"
 S3_AUDIO_PREFIX = "recordings/"
 S3_IMAGE_PREFIX = "images/"
 
+# Get AWS credentials from environment variables (Streamlit Cloud secrets)
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+# Create AWS session with credentials if available
+if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY:
+    aws_session = boto3.Session(
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name=S3_REGION
+    )
+else:
+    # Fallback to default credential chain (for local development)
+    aws_session = boto3.Session(region_name=S3_REGION)
+
 # AWS Clients
-s3 = boto3.client("s3", region_name=S3_REGION)
-polly = boto3.client("polly", region_name=S3_REGION)
+s3 = aws_session.client("s3")
+polly = aws_session.client("polly")
 
 MAX_POLLY_CHARS = 2500
 
 def get_aws_account_info() -> dict:
     """Get AWS account information to verify credentials."""
     try:
-        sts = boto3.client("sts", region_name=S3_REGION)
+        sts = aws_session.client("sts")
         identity = sts.get_caller_identity()
         return {
             "account_id": identity.get("Account"),
